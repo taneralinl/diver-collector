@@ -164,7 +164,12 @@ func _place_entity(entity):
 	var min_x = 180.0
 	var max_x = 970.0
 	
-	entity.position = Vector2(randf_range(min_x, max_x), -20)
+	var spawn_y = -20.0
+	# If it's an enemy and it's a Jellyfish (Index 2 in Enemy.Type), spawn at bottom
+	if entity is Enemy and entity.enemy_type == 2:
+		spawn_y = 820.0
+		
+	entity.position = Vector2(randf_range(min_x, max_x), spawn_y)
 	entity.add_to_group("spawned_entities")
 	get_tree().current_scene.call_deferred("add_child", entity)
 

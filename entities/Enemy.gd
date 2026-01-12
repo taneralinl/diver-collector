@@ -12,7 +12,7 @@ enum Type { MINE, DRIFTING_MINE, JELLYFISH, SHARK }
 const TYPE_CONFIG = {
 	Type.MINE:          {"speed": 300, "color": Color(0.4, 0.4, 0.4), "behavior": "fall",  "scale": 0.7, "name": "Mine", "texture": "res://assets/obstacle_mine.svg"},
 	Type.DRIFTING_MINE: {"speed": 280, "color": Color(1.0, 0.3, 0.3), "behavior": "drift", "scale": 0.8, "name": "Drifting Mine", "texture": "res://assets/obstacle_mine.svg"},
-	Type.JELLYFISH:     {"speed": 150, "color": Color(1.0, 1.0, 1.0), "behavior": "track", "scale": 0.9, "name": "Jellyfish", "texture": "res://assets/enemy_jellyfish.svg"},
+	Type.JELLYFISH:     {"speed": 80,  "color": Color(1.0, 1.0, 1.0), "behavior": "pulse",  "scale": 0.9, "name": "Jellyfish", "texture": "res://assets/enemy_jellyfish.svg"},
 	Type.SHARK:         {"speed": 400, "color": Color(1.0, 1.0, 1.0), "behavior": "chase", "scale": 1.1, "name": "Shark", "texture": "res://assets/enemy_shark.svg"}
 }
 
@@ -72,19 +72,20 @@ func _ready():
 
 func _process(delta):
 	var speed = config.get("speed", 300)
-	position.y += speed * delta
+	
+	if config.behavior == "pulse":
+		position.y -= speed * delta # Rise up
+		_do_pulse(delta)
+		if position.y < -100: queue_free()
+	else:
+		position.y += speed * delta # Fall down
+		if position.y > 800: queue_free()
 	
 	# Behavior-specific movement
 	match config.behavior:
-		"drift":
-			_do_drift(delta)
-		"track":
-			_do_track(delta, track_speed)
-		"chase":
-			_do_track(delta, track_speed * 2.5)
-	
-	if position.y > 800:
-		queue_free()
+		"drift": _do_drift(delta)
+		"track": _do_track(delta, track_speed)
+		"chase": _do_track(delta, track_speed * 2.5)
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # BEHAVIORS
@@ -103,6 +104,14 @@ func _do_track(delta, spd):
 	var diff = player.global_position.x - global_position.x
 	if abs(diff) > 10:
 		position.x += sign(diff) * spd * delta
+
+func _do_pulse(delta):
+	# Pulsing scale effect
+	var pulse = sin(Time.get_ticks_msec() * 0.005) * 0.1
+	scale = Vector2(config.scale + pulse, config.scale + pulse)
+	
+	# Sways slightly
+	position.x += sin(Time.get_ticks_msec() * 0.002) * 20.0 * delta
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # COLLISION

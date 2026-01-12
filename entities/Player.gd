@@ -190,6 +190,39 @@ func _play_tool_animation():
 	back_tween.tween_property(tool_sprite, "position:x", 0.0, 0.2).set_delay(0.1)
 	back_tween.tween_property(tool_sprite, "rotation_degrees", 0.0, 0.2).set_delay(0.1)
 
+func trigger_capture_vfx(tier: int, target_pos: Vector2):
+	"""Visual feedback unique to each tool tier."""
+	match tier:
+		0: # Bare Hands: Simple flash
+			var effect = load("res://entities/CaptureEffect.tscn").instantiate()
+			effect.global_position = target_pos
+			get_parent().add_child(effect)
+			effect.setup(Color.YELLOW, 0)
+		1: # Net: Scaling white circle
+			var effect = load("res://entities/CaptureEffect.tscn").instantiate()
+			effect.global_position = target_pos
+			get_parent().add_child(effect)
+			effect.setup(Color.WHITE, 1)
+		2, 3: # Hook/Harpoon: Line thrust
+			var line = Line2D.new()
+			line.width = 4.0 if tier == 2 else 10.0
+			line.default_color = Color(0.9, 0.9, 1.0, 0.7)
+			line.add_point(global_position)
+			line.add_point(target_pos)
+			get_parent().add_child(line)
+			
+			var tween = create_tween()
+			tween.tween_property(line, "modulate:a", 0.0, 0.1)
+			tween.tween_callback(line.queue_free)
+		4: # Drone: Pulse ring
+			var effect = load("res://entities/CaptureEffect.tscn").instantiate()
+			effect.global_position = target_pos
+			effect.scale = Vector2(0.5, 0.5)
+			get_parent().add_child(effect)
+			effect.setup(Color.CYAN, 4)
+			var tween = create_tween()
+			tween.tween_property(effect, "scale", Vector2(4.0, 4.0), 0.2)
+
 func get_magnet_position():
 	return global_position
 

@@ -1,9 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://bg1v2w3x4y50"]
+[gd_scene load_steps=7 format=3 uid="uid://bg1v2w3x4y50"]
 
 [ext_resource type="Texture2D" path="res://assets/bg_ocean.svg" id="1_tex"]
 [ext_resource type="Texture2D" path="res://assets/bg_deep.svg" id="2_deep"]
+[ext_resource type="Shader" path="res://assets/shaders/god_rays.gdshader" id="2_rays"]
 [ext_resource type="Texture2D" path="res://assets/bg_particles.svg" id="3_particles"]
 [ext_resource type="Texture2D" path="res://assets/overlay_vignette.svg" id="4_vignette"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1"]
+shader = ExtResource("2_rays")
+shader_parameter/ray_color = Color(0.4, 0.7, 0.9, 0.15)
+shader_parameter/speed = 0.5
+shader_parameter/ray_count = 8.0
 
 [node name="Background" type="ParallaxBackground" groups=["background"]]
 
@@ -22,6 +29,18 @@ motion_mirroring = Vector2(0, 1024)
 texture = ExtResource("1_tex")
 centered = false
 modulate = Color(1, 1, 1, 0.3)
+
+[node name="LayerRays" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="GodRays" type="ColorRect" parent="LayerRays"]
+material = SubResource("ShaderMaterial_1")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
 [node name="LayerParticles" type="ParallaxLayer" parent="."]
 motion_scale = Vector2(1, 2.0)

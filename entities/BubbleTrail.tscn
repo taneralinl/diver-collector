@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://b8v9w0x1y2z3"]
+[gd_scene load_steps=2 format=3 uid="uid://b8waw0x1y203"]
 
 [node name="BubbleTrail" type="CPUParticles2D"]
 amount = 12

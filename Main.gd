@@ -223,6 +223,11 @@ func _on_collectible_spawned(collectible):
 			var value = collectible.get_value()
 			score_system.add_score(value)
 			
+			# VFX: Specialized Tool Feedback (Shows the CURRENT tool in action)
+			var player = get_tree().get_first_node_in_group("player")
+			if player and player.has_method("trigger_capture_vfx") and equipment_system:
+				player.trigger_capture_vfx(equipment_system.get_tool_tier(), collectible.position)
+			
 			# VFX: Spawn Particles
 			var effect = load("res://entities/CollectionEffect.tscn").instantiate()
 			effect.position = collectible.position
@@ -250,7 +255,7 @@ func _on_collectible_spawned(collectible):
 			if economy_system:
 				economy_system.add_pearls(value)
 			if sound_manager: 
-				sound_manager.play_coin_sfx()
+				sound_manager.play_capture_sfx(collectible.config.tier)
 		)
 
 func _on_enemy_spawned(enemy):
@@ -269,10 +274,15 @@ func _on_score_updated(new_score):
 	if depth_layer_system:
 		depth_layer_system.update_depth(new_score)
 	
-	# Parallax Background Scroll
+	# Parallax Background Scroll & Ray Fade
 	var bg = get_tree().get_first_node_in_group("background")
 	if bg and bg is ParallaxBackground:
-		bg.scroll_offset.y = new_score * 0.5 # Scroll downwards as depth increases
+		bg.scroll_offset.y = new_score * 0.5
+		
+		# Fade God Rays as we go deeper (Visible at 0, invisible at 1000m)
+		var rays = bg.get_node_or_null("LayerRays/GodRays")
+		if rays:
+			rays.modulate.a = clamp(1.0 - (new_score / 1500.0), 0.0, 1.0)
 	
 	# Check for Equipment Upgrades
 	if equipment_system:
