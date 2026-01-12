@@ -16,3 +16,4 @@ res://systems/equipment/EquipmentSystem.gd
 res://systems/depth/DepthLayerSystem.gd
 res://systems/economy/EconomySystem.gd
 res://ui/ShopUI.gd
+res://README.md

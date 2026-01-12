@@ -10,9 +10,9 @@
 ## ✨ Key Features
 - **Addictive Feedback Loop:** Satisfying procedural "Plink!" sounds for shards and heavy "Splash!" impacts for fish.
 - **Specialized Tools:** 
-    - **Net:** Wide area capture.
-    - **Hook/Harpoon:** Long-range precision snags.
-    - **Drone:** Automated high-tech collection.
+	- **Net:** Wide area capture.
+	- **Hook/Harpoon:** Long-range precision snags.
+	- **Drone:** Automated high-tech collection.
 - **Deep-Sea Atmosphere:** Multi-layer parallax background, god rays that fade with depth, and dynamic bubble trails.
 - **Roguelite Shop:** Permanent upgrades for speed, magnet range, and extra lives.
 - **Persistence:** High scores and upgrades are saved automatically.

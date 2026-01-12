@@ -99,7 +99,7 @@ static func generate_hit_sfx() -> AudioStreamWAV:
 
 # Generates a looping "Underwater Drone/Bubbles" sound
 static func generate_ambient_sfx() -> AudioStreamWAV:
-	var duration = 2.0 # Longer loop
+	var duration = 4.0 # Longer loop for better variety
 	var frames = int(SAMPLE_RATE * duration)
 	var stream = AudioStreamWAV.new()
 	stream.format = AudioStreamWAV.FORMAT_16_BITS
@@ -112,12 +112,26 @@ static func generate_ambient_sfx() -> AudioStreamWAV:
 	
 	for i in range(frames):
 		var t = float(i) / SAMPLE_RATE
-		# Low frequency noise (bubbling/drone)
-		var sample = (randf() * 2.0 - 1.0) * 0.1
-		# Low pass filter (very simple: average with prev)
-		sample = (sample + sin(t * 2.0 * PI * 40.0)) * 0.5
 		
-		var sample_int = int(clamp(sample, -1.0, 1.0) * 16000.0) # Lower volume
+		# 1. Sub-Bass Drone (Pulsing sine waves)
+		var drone = (sin(t * 2.0 * PI * 50.0) + sin(t * 2.0 * PI * 52.0)) * 0.5
+		# Slow modulation (filter sweep simulation)
+		var modulation = 0.5 + 0.5 * sin(t * 2.0 * PI * 0.25)
+		drone *= modulation * 0.2
+		
+		# 2. Subtle Rhythmic Bubbles (Pops)
+		var bubble = 0.0
+		# Randomly spaced pops at 0.5s, 1.2s, 2.8s etc.
+		for pop_t in [0.5, 1.2, 1.8, 2.7, 3.4]:
+			var dt = t - pop_t
+			if dt > 0 and dt < 0.15:
+				var freq = 200.0 + sin(pop_t * 1000.0) * 50.0
+				bubble += sin(dt * 2.0 * PI * freq) * exp(-40.0 * dt)
+		
+		var sample = (drone + bubble * 0.05)
+		
+		# Limit peak to avoid clipping
+		var sample_int = int(clamp(sample, -1.0, 1.0) * 8000.0) # Lower overall volume
 		buffer.encode_s16(i * 2, sample_int)
 		
 	stream.data = buffer

@@ -20,7 +20,7 @@ func _ready():
 func play_ambient(stream: AudioStream):
 	var player = AudioStreamPlayer.new()
 	player.stream = stream
-	player.volume_db = -10.0
+	player.volume_db = -12.0
 	player.autoplay = true
 	add_child(player)
 

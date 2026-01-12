@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://c5v6w7x8y9z0"]
+[gd_scene load_steps=2 format=3 uid="uid://c5v6w7x80a00"]
 
 [ext_resource type="Script" path="res://entities/CaptureEffect.gd" id="1_script"]
 
