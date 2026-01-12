@@ -4,9 +4,31 @@
 [ext_resource type="Texture2D" path="res://assets/ui_panel.svg" id="2_panel"]
 [ext_resource type="Texture2D" path="res://assets/button.svg" id="3_btn"]
 [ext_resource type="Texture2D" path="res://assets/coin_pearl.svg" id="4_pearl"]
+[ext_resource type="Shader" path="res://ui/shaders/blur_shader.gdshader" id="5_blur"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_blur"]
+shader = ExtResource("5_blur")
+shader_parameter/lod = 2.0
 
 [node name="GameUI" type="CanvasLayer"]
+layer = 10
 script = ExtResource("1_ui_script")
+
+[node name="BlurLayer" type="CanvasLayer" parent="."]
+layer = 5
+visible = false
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="BlurLayer"]
+copy_mode = 2
+
+[node name="BlurRect" type="ColorRect" parent="BlurLayer"]
+material = SubResource("ShaderMaterial_blur")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
 [node name="HUD" type="Control" parent="."]
 layout_mode = 3
@@ -38,6 +60,7 @@ alignment = 0
 custom_minimum_size = Vector2(240, 70)
 layout_mode = 2
 texture = ExtResource("2_panel")
+material = SubResource("ShaderMaterial_blur")
 expand_mode = 1
 
 [node name="ScoreLabel" type="Label" parent="HUD/MarginContainer/TopBar/ScorePanel"]
@@ -60,6 +83,7 @@ size_flags_horizontal = 3
 custom_minimum_size = Vector2(160, 60)
 layout_mode = 2
 texture = ExtResource("2_panel")
+material = SubResource("ShaderMaterial_blur")
 expand_mode = 1
 
 [node name="HBox" type="HBoxContainer" parent="HUD/MarginContainer/TopBar/PearlPanel"]
@@ -137,6 +161,15 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="Overlay" type="ColorRect" parent="MenuLayer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.05, 0.1, 0.4)
+
 [node name="MenuPanel" type="CenterContainer" parent="MenuLayer"]
 layout_mode = 1
 anchors_preset = 15
@@ -145,65 +178,54 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="MenuLayer/MenuPanel"]
-custom_minimum_size = Vector2(400, 300)
+[node name="Panel" type="PanelContainer" parent="MenuLayer/MenuPanel"]
+custom_minimum_size = Vector2(450, 400)
 layout_mode = 2
+material = SubResource("ShaderMaterial_blur")
 
-[node name="Bg" type="TextureRect" parent="MenuLayer/MenuPanel/PanelContainer"]
+[node name="VBox" type="VBoxContainer" parent="MenuLayer/MenuPanel/Panel"]
 layout_mode = 2
-texture = ExtResource("2_panel")
-expand_mode = 1
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MenuLayer/MenuPanel/PanelContainer"]
-layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 25
 alignment = 1
 
-[node name="Title" type="Label" parent="MenuLayer/MenuPanel/PanelContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="MenuLayer/MenuPanel/Panel/VBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.305882, 0.8, 0.639216, 1)
-theme_override_font_sizes/font_size = 42
-text = "DIVER COLLECTOR"
+theme_override_colors/font_color = Color(0.4, 1, 0.8, 1)
+theme_override_font_sizes/font_size = 52
+text = "ABYSS DIVER"
 horizontal_alignment = 1
-autowrap_mode = 2
 
-[node name="HighScoreLabel" type="Label" parent="MenuLayer/MenuPanel/PanelContainer/VBoxContainer"]
+[node name="SubTitle" type="Label" parent="MenuLayer/MenuPanel/Panel/VBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.84, 0, 1)
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 18
+text = "COLLECT THE SHARDS OF THE DEEP"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="MenuLayer/MenuPanel/Panel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HighScoreLabel" type="Label" parent="MenuLayer/MenuPanel/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0.4, 1)
 theme_override_font_sizes/font_size = 24
-text = "High Score: 0"
+text = "BEST DEPTH: 0m"
 horizontal_alignment = 1
-autowrap_mode = 2
 
-[node name="ControlsLabel" type="Label" parent="MenuLayer/MenuPanel/PanelContainer/VBoxContainer"]
+[node name="Controls" type="Label" parent="MenuLayer/MenuPanel/Panel/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
-theme_override_font_sizes/font_size = 18
-text = "MOVE: ARROW KEYS / WASD
-DASH: SPACE / ENTER"
+theme_override_font_sizes/font_size = 16
+text = "[WASD] MOVE • [SPACE] DASH"
 horizontal_alignment = 1
-autowrap_mode = 2
 
-[node name="StartButton" type="TextureButton" parent="MenuLayer/MenuPanel/PanelContainer/VBoxContainer"]
-custom_minimum_size = Vector2(160, 60)
+[node name="StartButton" type="Button" parent="MenuLayer/MenuPanel/Panel/VBox"]
+custom_minimum_size = Vector2(220, 60)
 layout_mode = 2
 size_flags_horizontal = 4
-texture_normal = ExtResource("3_btn")
-ignore_texture_size = true
-stretch_mode = 5
-
-[node name="Label" type="Label" parent="MenuLayer/MenuPanel/PanelContainer/VBoxContainer/StartButton"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.1, 0.2, 0.3, 1)
-theme_override_font_sizes/font_size = 24
-text = "DIVE"
-horizontal_alignment = 1
-vertical_alignment = 1
+theme_override_font_sizes/font_size = 28
+text = "BEGIN DIVE"
 
 [node name="GameOverLayer" type="Control" parent="."]
 visible = false
@@ -214,6 +236,15 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="Overlay" type="ColorRect" parent="GameOverLayer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1, 0, 0, 0.5)
+
 [node name="GameOverPanel" type="CenterContainer" parent="GameOverLayer"]
 layout_mode = 1
 anchors_preset = 15
@@ -222,54 +253,45 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="GameOverLayer/GameOverPanel"]
-custom_minimum_size = Vector2(400, 300)
+[node name="Panel" type="PanelContainer" parent="GameOverLayer/GameOverPanel"]
+custom_minimum_size = Vector2(400, 320)
 layout_mode = 2
+material = SubResource("ShaderMaterial_blur")
 
-[node name="Bg" type="TextureRect" parent="GameOverLayer/GameOverPanel/PanelContainer"]
-layout_mode = 2
-texture = ExtResource("2_panel")
-expand_mode = 1
-
-[node name="VBoxContainer" type="VBoxContainer" parent="GameOverLayer/GameOverPanel/PanelContainer"]
+[node name="VBox" type="VBoxContainer" parent="GameOverLayer/GameOverPanel/Panel"]
 layout_mode = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="Title" type="Label" parent="GameOverLayer/GameOverPanel/PanelContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="GameOverLayer/GameOverPanel/Panel/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
 theme_override_font_sizes/font_size = 48
-text = "DEPTH REACHED"
+text = "LIMIT REACHED"
 horizontal_alignment = 1
-autowrap_mode = 2
 
-[node name="FinalScoreLabel" type="Label" parent="GameOverLayer/GameOverPanel/PanelContainer/VBoxContainer"]
+[node name="ResultBox" type="VBoxContainer" parent="GameOverLayer/GameOverPanel/Panel/VBox"]
+layout_mode = 2
+
+[node name="FinalScoreLabel" type="Label" parent="GameOverLayer/GameOverPanel/Panel/VBox/ResultBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
-text = "Score: 1240"
+text = "DEPTH: 1240m"
 horizontal_alignment = 1
 
-[node name="RestartButton" type="TextureButton" parent="GameOverLayer/GameOverPanel/PanelContainer/VBoxContainer"]
-custom_minimum_size = Vector2(180, 60)
+[node name="PearlBonusLabel" type="Label" parent="GameOverLayer/GameOverPanel/Panel/VBox/ResultBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "+ 42 Pearls Collected"
+horizontal_alignment = 1
+
+[node name="RestartButton" type="Button" parent="GameOverLayer/GameOverPanel/Panel/VBox"]
+custom_minimum_size = Vector2(200, 60)
 layout_mode = 2
 size_flags_horizontal = 4
-texture_normal = ExtResource("3_btn")
-ignore_texture_size = true
-stretch_mode = 5
-
-[node name="Label" type="Label" parent="GameOverLayer/GameOverPanel/PanelContainer/VBoxContainer/RestartButton"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.1, 0.2, 0.3, 1)
 theme_override_font_sizes/font_size = 24
-text = "DIVE AGAIN"
-horizontal_alignment = 1
-vertical_alignment = 1
+text = "RE-DIVE"
 
-[connection signal="pressed" from="MenuLayer/MenuPanel/PanelContainer/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
-[connection signal="pressed" from="GameOverLayer/GameOverPanel/PanelContainer/VBoxContainer/RestartButton" to="." method="_on_restart_button_pressed"]
+[connection signal="pressed" from="MenuLayer/MenuPanel/Panel/VBox/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="GameOverLayer/GameOverPanel/Panel/VBox/RestartButton" to="." method="_on_restart_button_pressed"]

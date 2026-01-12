@@ -25,6 +25,22 @@ var transition_ui
 func _ready():
 	print("🎮 Abyss Diver [v0.0.0.1] Starting... Initializing Systems")
 	_initialize_systems()
+	
+	# Fullscreen by default
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+
+func _input(event):
+	if event.is_action_pressed("ui_cancel"): # Escape
+		if game_ui and game_ui.visible:
+			game_ui.toggle_menu()
+	
+	# F11 Fullscreen Toggle
+	if event is InputEventKey and event.pressed and event.keycode == KEY_F11:
+		var is_fs = DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN
+		if is_fs:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		else:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 
 func _initialize_systems():
 	# 0. UI System & Background
@@ -163,6 +179,9 @@ func _on_game_started():
 	if economy_system:
 		economy_system.reset_run()
 	
+	var player = $Player
+	if player and player.has_method("reset"):
+		player.reset()
 	# Reset UI visuals
 	game_ui.update_score(0)
 	game_ui.update_pearls(0)
@@ -173,8 +192,7 @@ func _on_game_started():
 	spawner_system.start_spawning()
 	game_ui.show_playing()
 	
-	# Reset Player
-	var player = $Player
+	# Reset Player visibility and position
 	if player:
 		if not player.is_in_group("player"): 
 			player.add_to_group("player")
@@ -205,12 +223,14 @@ func _on_game_over():
 		game_ui.update_high_score(final_score)
 	
 	# Convert run pearls to abyss shards
+	var pearls_count = 0
 	if economy_system:
+		pearls_count = economy_system.run_pearls
 		var depth_bonus = 1.0 + (depth_layer_system.current_layer / 500.0) if depth_layer_system else 1.0
 		economy_system.convert_pearls_to_shards(depth_bonus)
 		persistence_system.save_all(economy_system)
 	
-	game_ui.show_game_over(final_score)
+	game_ui.show_game_over(final_score, pearls_count)
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # ENTITY HANDLERS
@@ -260,7 +280,7 @@ func _on_collectible_spawned(collectible):
 
 func _on_enemy_spawned(enemy):
 	if enemy.has_signal("hit_player"):
-		enemy.hit_player.connect(func(): _on_player_hit())
+		enemy.hit_player.connect(_on_player_hit)
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # SCORE & PROGRESSION HANDLERS
@@ -288,6 +308,7 @@ func _on_score_updated(new_score):
 	if equipment_system:
 		equipment_system.check_upgrade(new_score)
 
+
 func _on_tool_upgraded(_new_tier, tool_name):
 	# Update UI
 	if game_ui:
@@ -306,7 +327,7 @@ func _on_player_dashed():
 	if sound_manager: 
 		sound_manager.play_dash_sfx()
 
-func _on_player_hit():
+func _on_player_hit(type: int = 0):
 	"""Handle player being hit — check for extra life."""
 	var player = $Player
 	if player and player.has_method("take_damage"):
@@ -314,7 +335,13 @@ func _on_player_hit():
 			# Survived with extra life
 			shake_screen(5.0, 0.3)
 			return
-	# No extra life — game over
+	
+	# No extra life — trigger specific death animation
+	if player and player.has_method("trigger_death"):
+		player.trigger_death(type)
+	
+	# Short delay for death animation before game over
+	await get_tree().create_timer(0.4).timeout
 	game_state_system.end_game()
 
 func _on_restart_requested():
@@ -322,9 +349,11 @@ func _on_restart_requested():
 	if shop_ui:
 		if transition_ui:
 			await transition_ui.fade_out()
+			if game_ui: game_ui.blur_layer.visible = true
 			shop_ui.show_shop()
 			await transition_ui.fade_in()
 		else:
+			if game_ui: game_ui.blur_layer.visible = true
 			shop_ui.show_shop()
 	else:
 		game_state_system.start_game()
@@ -332,9 +361,11 @@ func _on_restart_requested():
 func _on_shop_continue():
 	if transition_ui:
 		await transition_ui.fade_out()
+		if game_ui: game_ui.blur_layer.visible = false
 		game_state_system.start_game()
 		await transition_ui.fade_in()
 	else:
+		if game_ui: game_ui.blur_layer.visible = false
 		game_state_system.start_game()
 
 # ═══════════════════════════════════════════════════════════════════════════════

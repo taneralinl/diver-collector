@@ -8,8 +8,10 @@ extends CanvasLayer
 
 @onready var menu_layer = $MenuLayer
 @onready var game_over_layer = $GameOverLayer
-@onready var final_score_label = $GameOverLayer/GameOverPanel/PanelContainer/VBoxContainer/FinalScoreLabel
-@onready var high_score_label = $MenuLayer/MenuPanel/PanelContainer/VBoxContainer/HighScoreLabel
+@onready var blur_layer = $BlurLayer
+@onready var final_score_label = $GameOverLayer/GameOverPanel/Panel/VBox/ResultBox/FinalScoreLabel
+@onready var pearl_bonus_label = $GameOverLayer/GameOverPanel/Panel/VBox/ResultBox/PearlBonusLabel
+@onready var high_score_label = $MenuLayer/MenuPanel/Panel/VBox/HighScoreLabel
 
 signal start_requested
 signal restart_requested
@@ -42,30 +44,36 @@ func update_high_score(score: int):
 func show_menu():
 	menu_layer.visible = true
 	game_over_layer.visible = false
+	blur_layer.visible = true
 	$HUD.visible = false
 
-func show_game_over(final_score: int):
+func show_game_over(final_score: int, pearls_collected: int = 0):
 	menu_layer.visible = false
 	game_over_layer.visible = true
+	blur_layer.visible = true
 	$HUD.visible = false
 	final_score_label.text = "Reached: %dm" % final_score
+	if pearl_bonus_label:
+		pearl_bonus_label.text = "+ %d Pearls Collected" % pearls_collected
 
 func show_playing():
 	menu_layer.visible = false
 	game_over_layer.visible = false
+	blur_layer.visible = false
 	$HUD.visible = true
 
 func _on_start_button_pressed():
-	animate_button($MenuLayer/MenuPanel/PanelContainer/VBoxContainer/StartButton, func(): start_requested.emit())
+	animate_button($MenuLayer/MenuPanel/Panel/VBox/StartButton, func(): start_requested.emit())
 
 func _on_restart_button_pressed():
-	animate_button($GameOverLayer/GameOverPanel/PanelContainer/VBoxContainer/RestartButton, func(): restart_requested.emit())
+	animate_button($GameOverLayer/GameOverPanel/Panel/VBox/RestartButton, func(): restart_requested.emit())
 
 func animate_button(btn: Control, callback: Callable):
 	var tween = create_tween()
 	# Pop effect
-	tween.tween_property(btn, "scale", Vector2(1.2, 1.2), 0.1).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tween.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.1)
+	btn.pivot_offset = btn.size / 2
+	tween.tween_property(btn, "scale", Vector2(1.15, 1.15), 0.08).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.08)
 	tween.tween_callback(callback)
 
 func show_notification(msg: String):
@@ -73,8 +81,14 @@ func show_notification(msg: String):
 	
 	notification_label.text = msg
 	notification_label.modulate.a = 0
+	notification_label.scale = Vector2(0.5, 0.5)
+	notification_label.pivot_offset = notification_label.size / 2
 	
-	var tween = create_tween()
-	tween.tween_property(notification_label, "modulate:a", 1.0, 0.3)
+	var tween = create_tween().set_parallel(true)
+	tween.tween_property(notification_label, "modulate:a", 1.0, 0.2)
+	tween.tween_property(notification_label, "scale", Vector2(1.2, 1.2), 0.3).set_trans(Tween.TRANS_ELASTIC)
+	
+	tween.set_parallel(false)
+	tween.tween_property(notification_label, "scale", Vector2(1.0, 1.0), 0.1)
 	tween.tween_interval(1.5)
-	tween.tween_property(notification_label, "modulate:a", 0.0, 0.5)
+	tween.tween_property(notification_label, "modulate:a", 0.0, 0.4)

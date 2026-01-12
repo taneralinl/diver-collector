@@ -1,0 +1,8 @@
+<svg width="40" height="30" viewBox="0 0 40 30" xmlns="http://www.w3.org/2000/svg">
+    <!-- Fin Shape -->
+    <path d="M0,15 L10,5 L35,0 L40,15 L35,30 L10,25 Z" fill="#f1c40f" />
+    <!-- Ridges for detail -->
+    <line x1="12" y1="10" x2="33" y2="7" stroke="#d4ac0d" stroke-width="1.5" />
+    <line x1="12" y1="20" x2="33" y2="23" stroke="#d4ac0d" stroke-width="1.5" />
+    <path d="M38,15 L35,5 Q38,15 35,25 Z" fill="#d4ac0d" opacity="0.5" />
+</svg>

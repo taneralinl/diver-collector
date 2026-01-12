@@ -51,8 +51,6 @@ var is_being_attracted = false
 
 func _ready():
 	add_to_group("collectibles")
-	# Ensure collision is detected
-	body_entered.connect(_on_body_entered)
 	
 	config = TYPE_CONFIG.get(collectible_type, TYPE_CONFIG[Type.PEARL])
 	

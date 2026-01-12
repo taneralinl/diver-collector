@@ -1,0 +1,6 @@
+<svg width="20" height="40" viewBox="0 0 20 40" xmlns="http://www.w3.org/2000/svg">
+    <!-- Upper Leg -->
+    <path d="M5,0 L15,0 L14,25 Q13,35 10,35 Q7,35 6,25 Z" fill="#2980b9" />
+    <!-- Knee highlight -->
+    <circle cx="10" cy="18" r="3" fill="#3498db" />
+</svg>

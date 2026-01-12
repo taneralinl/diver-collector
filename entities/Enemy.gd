@@ -22,7 +22,7 @@ const TYPE_CONFIG = {
 
 @export var enemy_type: Type = Type.MINE
 
-signal hit_player
+signal hit_player(type: Type)
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # STATE
@@ -39,8 +39,6 @@ var track_speed = 80.0
 
 func _ready():
 	add_to_group("enemies")
-	# Ensure collision is detected
-	body_entered.connect(_on_body_entered)
 	
 	config = TYPE_CONFIG.get(enemy_type, TYPE_CONFIG[Type.MINE])
 	
@@ -119,7 +117,7 @@ func _do_pulse(delta):
 
 func _on_body_entered(body):
 	if body.is_in_group("player"):
-		hit_player.emit()
+		hit_player.emit(enemy_type)
 		
 		# VFX: Explosion for Mines
 		if enemy_type == Type.MINE or enemy_type == Type.DRIFTING_MINE:

@@ -11,9 +11,9 @@ signal continue_pressed
 # REFERENCES
 # ═══════════════════════════════════════════════════════════════════════════════
 
-@onready var shards_label = $Panel/VBoxContainer/Header/CoinsLabel
-@onready var upgrades_container = $Panel/VBoxContainer/UpgradesContainer
-@onready var continue_button = $Panel/VBoxContainer/ContinueButton
+@onready var shards_label = $MainPanel/PanelContainer/VBox/Margin/Header/CoinsLabel
+@onready var upgrades_container = $MainPanel/PanelContainer/VBox/ScrollWrap/ScrollContainer/UpgradesContainer
+@onready var continue_button = $MainPanel/PanelContainer/VBox/Footer/ContinueButton
 
 var economy_system
 
@@ -37,7 +37,8 @@ func show_shop():
 	
 	# Add Reset Button if not exists
 	var reset_exists = false
-	for child in $Panel/VBoxContainer.get_children():
+	var container = $MainPanel/PanelContainer/VBox
+	for child in container.get_children():
 		if child.name == "ResetButton":
 			reset_exists = true
 			break
@@ -54,7 +55,8 @@ func show_shop():
 			_refresh_upgrades("")
 			_update_shards_display(0)
 		)
-		$Panel/VBoxContainer.add_child(reset_btn)
+		$MainPanel/PanelContainer/VBox.add_child(reset_btn)
+		reset_btn.pressed.connect(func(): animate_button(reset_btn, func(): pass)) # Already connected reset logic above
 
 func hide_shop():
 	visible = false
@@ -97,7 +99,7 @@ func _create_upgrade_button(upgrade_id: String, upgrade: Dictionary, level: int,
 	button.tooltip_text = upgrade.description
 	button.custom_minimum_size = Vector2(300, 50)
 	
-	button.pressed.connect(func(): _on_upgrade_pressed(upgrade_id))
+	button.pressed.connect(func(): _on_upgrade_pressed(upgrade_id, button))
 	
 	# Style
 	if can_buy:
@@ -109,13 +111,21 @@ func _create_upgrade_button(upgrade_id: String, upgrade: Dictionary, level: int,
 	
 	return button
 
+func animate_button(btn: Control, callback: Callable):
+	var tween = create_tween()
+	tween.tween_property(btn, "scale", Vector2(1.05, 1.05), 0.05).set_trans(Tween.TRANS_QUAD)
+	tween.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.05)
+	tween.tween_callback(callback)
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # HANDLERS
 # ═══════════════════════════════════════════════════════════════════════════════
 
-func _on_upgrade_pressed(upgrade_id: String):
-	economy_system.purchase_upgrade(upgrade_id)
+func _on_upgrade_pressed(upgrade_id: String, btn: Control):
+	animate_button(btn, func(): economy_system.purchase_upgrade(upgrade_id))
 
 func _on_continue_pressed():
-	hide_shop()
-	continue_pressed.emit()
+	animate_button(continue_button, func():
+		hide_shop()
+		continue_pressed.emit()
+	)
