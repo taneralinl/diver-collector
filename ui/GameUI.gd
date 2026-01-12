@@ -4,6 +4,7 @@ extends CanvasLayer
 @onready var pearl_label = $HUD/MarginContainer/TopBar/PearlPanel/HBox/PearlLabel
 @onready var tool_name_label = $HUD/MarginContainer/BottomBar/EquipmentPanel/ToolName
 @onready var zone_label = $HUD/MarginContainer/BottomBar/ZoneLabel
+@onready var notification_label = $HUD/NotificationLabel
 
 @onready var menu_layer = $MenuLayer
 @onready var game_over_layer = $GameOverLayer
@@ -66,3 +67,14 @@ func animate_button(btn: Control, callback: Callable):
 	tween.tween_property(btn, "scale", Vector2(1.2, 1.2), 0.1).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tween.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.1)
 	tween.tween_callback(callback)
+
+func show_notification(msg: String):
+	if not notification_label: return
+	
+	notification_label.text = msg
+	notification_label.modulate.a = 0
+	
+	var tween = create_tween()
+	tween.tween_property(notification_label, "modulate:a", 1.0, 0.3)
+	tween.tween_interval(1.5)
+	tween.tween_property(notification_label, "modulate:a", 0.0, 0.5)

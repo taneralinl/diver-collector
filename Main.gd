@@ -16,6 +16,7 @@ var equipment_system
 var economy_system
 var game_ui
 var shop_ui
+var transition_ui
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # LIFECYCLE
@@ -33,6 +34,9 @@ func _initialize_systems():
 	game_ui = load("res://ui/GameUI.tscn").instantiate()
 	game_ui.name = "GameUI"
 	add_child(game_ui)
+	
+	transition_ui = load("res://ui/TransitionUI.tscn").instantiate()
+	add_child(transition_ui)
 	
 	# QA System
 	var qa_system = load("res://systems/qa/QASystem.gd").new()
@@ -78,7 +82,7 @@ func _initialize_systems():
 	game_state_system.game_over.connect(_on_game_over)
 	
 	# UI Signals
-	game_ui.start_requested.connect(func(): game_state_system.start_game())
+	game_ui.start_requested.connect(_on_start_requested)
 	game_ui.restart_requested.connect(_on_restart_requested)
 
 	# 5. Progression System
@@ -117,7 +121,10 @@ func _initialize_systems():
 
 	# Connect Depth Signals to UI
 	if depth_layer_system:
-		depth_layer_system.layer_changed.connect(game_ui.update_zone)
+		depth_layer_system.layer_changed.connect(func(zone):
+			game_ui.update_zone(zone)
+			game_ui.show_notification("%s REACHED" % zone.to_upper())
+		)
 	
 	# Load saved economy data
 	economy_system.set_deep_coins(persistence_system.load_deep_coins())
@@ -135,6 +142,14 @@ func _initialize_systems():
 # ═══════════════════════════════════════════════════════════════════════════════
 # GAME STATE HANDLERS
 # ═══════════════════════════════════════════════════════════════════════════════
+
+func _on_start_requested():
+	if transition_ui:
+		await transition_ui.fade_out()
+		game_state_system.start_game()
+		await transition_ui.fade_in()
+	else:
+		game_state_system.start_game()
 
 func _on_game_started():
 	score_system.reset_score()
@@ -244,6 +259,7 @@ func _on_tool_upgraded(_new_tier, tool_name):
 	# Update UI
 	if game_ui:
 		game_ui.update_equipment(tool_name)
+		game_ui.show_notification("%s UNLOCKED!" % tool_name.to_upper())
 	
 	# Play sound?
 	# if sound_manager: sound_manager.play_upgrade_sfx()
@@ -269,14 +285,24 @@ func _on_player_hit():
 	game_state_system.end_game()
 
 func _on_restart_requested():
-	# Show shop before restarting
+	# Show shop before next run
 	if shop_ui:
-		shop_ui.show_shop()
+		if transition_ui:
+			await transition_ui.fade_out()
+			shop_ui.show_shop()
+			await transition_ui.fade_in()
+		else:
+			shop_ui.show_shop()
 	else:
-		_on_game_started()
+		game_state_system.start_game()
 
 func _on_shop_continue():
-	_on_game_started()
+	if transition_ui:
+		await transition_ui.fade_out()
+		game_state_system.start_game()
+		await transition_ui.fade_in()
+	else:
+		game_state_system.start_game()
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # EFFECTS

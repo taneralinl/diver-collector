@@ -7,7 +7,7 @@ class_name Collectible
 # ENUMS & CONSTANTS
 # ═══════════════════════════════════════════════════════════════════════════════
 
-enum Type { PEARL, SMALL_FISH, MEDIUM_FISH, LARGE_FISH, TREASURE }
+enum Type { PEARL, SMALL_FISH, MEDIUM_FISH, LARGE_FISH, TREASURE, SCRAP }
 enum Tier { T1, T2, T3, T4, T5 }
 
 const TYPE_CONFIG = {
@@ -15,7 +15,8 @@ const TYPE_CONFIG = {
 	Type.SMALL_FISH:  {"tier": Tier.T2, "value": 25,  "color": Color(1.0, 1.0, 1.0),    "name": "Small Fish",  "scale": 0.6, "speed": 220, "texture": "res://assets/fish_small.svg"},
 	Type.MEDIUM_FISH: {"tier": Tier.T3, "value": 50,  "color": Color(1.0, 1.0, 1.0),    "name": "Medium Fish", "scale": 0.8, "speed": 180, "texture": "res://assets/fish_medium.svg"},
 	Type.LARGE_FISH:  {"tier": Tier.T4, "value": 100, "color": Color(1.0, 1.0, 1.0),    "name": "Large Fish",  "scale": 1.0, "speed": 150, "texture": "res://assets/fish_large.svg"},
-	Type.TREASURE:    {"tier": Tier.T5, "value": 250, "color": Color(1.0, 1.0, 1.0),   "name": "Treasure",    "scale": 1.2, "speed": 120, "texture": "res://assets/treasure.svg"}
+	Type.TREASURE:    {"tier": Tier.T5, "value": 250, "color": Color(1.0, 1.0, 1.0),   "name": "Treasure",    "scale": 1.2, "speed": 120, "texture": "res://assets/treasure.svg"},
+	Type.SCRAP:       {"tier": Tier.T1, "value": 15,  "color": Color(1.0, 0.8, 0.6),    "name": "Fish Scrap",  "scale": 0.4, "speed": 150, "texture": "res://assets/loot_scrap.svg"}
 }
 
 # Tool tiers required to capture each collectible tier
@@ -146,8 +147,8 @@ func _on_body_entered(body):
 	# Successful collection
 	collected.emit()
 	
-	# Pinata Mechanic: Large entities explode into smaller loot
-	if config.tier >= Tier.T4: # Large Fish or Treasure
+	# Pinata Mechanic: Medium/Large entities explode into smaller loot
+	if config.tier >= Tier.T3: # Medium Fish, Large Fish, Treasure
 		_explode_into_loot()
 	
 	set_deferred("monitoring", false)
@@ -157,25 +158,30 @@ func _on_body_entered(body):
 	tween.tween_callback(queue_free)
 
 func _explode_into_loot():
-	"""Spawn 3-5 individual pearls in a burst."""
-	var pearl_count = 3 if config.tier == Tier.T4 else 6
+	"""Spawn individual pearls/scraps in a burst."""
+	var count = 3 if config.tier == Tier.T4 else 6
 	var scene_path = "res://entities/Collectible.tscn"
 	var collectible_scene = load(scene_path)
 	
-	for i in range(pearl_count):
-		var pearl = collectible_scene.instantiate()
-		pearl.collectible_type = Type.PEARL
-		pearl.position = global_position
+	# Determine what type of loot to drop
+	var loot_type = Type.PEARL 
+	if collectible_type == Type.LARGE_FISH or collectible_type == Type.MEDIUM_FISH:
+		loot_type = Type.SCRAP
+	
+	for i in range(count):
+		var loot = collectible_scene.instantiate()
+		loot.collectible_type = loot_type
+		loot.position = global_position
 		
 		# Give it some initial velocity/push
-		get_parent().add_child(pearl)
+		get_parent().add_child(loot)
 		
 		var angle = randf() * TAU
 		var mag = randf_range(50, 150)
 		var jump_offset = Vector2(cos(angle), sin(angle)) * mag
 		
 		var tween = create_tween().set_parallel(true)
-		tween.tween_property(pearl, "position", pearl.position + jump_offset, 0.4).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tween.tween_property(loot, "position", loot.position + jump_offset, 0.4).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 
 func _get_player_tool_tier(_player) -> int:

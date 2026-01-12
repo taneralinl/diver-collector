@@ -157,6 +157,21 @@ func start_dash():
 		
 	velocity = dash_dir * dash_speed
 	dashed.emit()
+	_play_tool_animation()
+
+func _play_tool_animation():
+	var tool_sprite = get_node_or_null("ToolSprite")
+	if not tool_sprite or not tool_sprite.visible: return
+	
+	var tween = create_tween().set_parallel(true)
+	# Quick thrust/swing forward
+	tween.tween_property(tool_sprite, "position:x", 15.0, 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(tool_sprite, "rotation_degrees", 20.0, 0.1)
+	
+	# Return to normal
+	var back_tween = create_tween().set_parallel(true)
+	back_tween.tween_property(tool_sprite, "position:x", 0.0, 0.2).set_delay(0.1)
+	back_tween.tween_property(tool_sprite, "rotation_degrees", 0.0, 0.2).set_delay(0.1)
 
 func get_magnet_position():
 	return global_position
