@@ -39,6 +39,31 @@ func _ready():
 	trail.name = "BubbleTrail"
 	trail.position = Vector2(0, 15)
 	add_child(trail)
+	
+	_setup_hand_net()
+
+func _setup_hand_net():
+	# Arm Container (Pivot point)
+	var arm_pivot = Marker2D.new()
+	arm_pivot.name = "ArmPivot"
+	arm_pivot.position = Vector2(5, 5) # Shoulder position
+	add_child(arm_pivot)
+	
+	# Arm Sprite
+	var arm = Sprite2D.new()
+	arm.name = "Arm"
+	arm.texture = load("res://assets/diver_arm.svg")
+	arm.offset = Vector2(10, 0) # Pivot at shoulder
+	arm_pivot.add_child(arm)
+	
+	# Hand Net
+	var net = Sprite2D.new()
+	net.name = "HandNet"
+	net.texture = load("res://assets/hand_net.svg")
+	net.position = Vector2(22, 0) # At the end of the arm
+	arm_pivot.add_child(net)
+	
+	arm_pivot.visible = false
 
 func apply_upgrades():
 	"""Apply shop upgrades to player stats."""
@@ -193,16 +218,13 @@ func _play_tool_animation():
 func trigger_capture_vfx(tier: int, target_pos: Vector2):
 	"""Visual feedback unique to each tool tier."""
 	match tier:
-		0: # Bare Hands: Simple flash
+		0, 1: # Bare Hands or Net: Scoop with Hand Net
+			_animate_hand_scoop(target_pos)
+			
 			var effect = load("res://entities/CaptureEffect.tscn").instantiate()
 			effect.global_position = target_pos
 			get_parent().add_child(effect)
-			effect.setup(Color.YELLOW, 0)
-		1: # Net: Scaling white circle
-			var effect = load("res://entities/CaptureEffect.tscn").instantiate()
-			effect.global_position = target_pos
-			get_parent().add_child(effect)
-			effect.setup(Color.WHITE, 1)
+			effect.setup(Color.YELLOW if tier == 0 else Color.WHITE, tier)
 		2, 3: # Hook/Harpoon: Line thrust
 			var line = Line2D.new()
 			line.width = 4.0 if tier == 2 else 10.0
@@ -222,6 +244,35 @@ func trigger_capture_vfx(tier: int, target_pos: Vector2):
 			effect.setup(Color.CYAN, 4)
 			var tween = create_tween()
 			tween.tween_property(effect, "scale", Vector2(4.0, 4.0), 0.2)
+
+func _animate_hand_scoop(target_pos: Vector2):
+	var pivot = get_node_or_null("ArmPivot")
+	var net = get_node_or_null("ArmPivot/HandNet")
+	if not pivot or not net: return
+	
+	# Show tools
+	pivot.visible = true
+	
+	# Calculate angle to target
+	var local_target = to_local(target_pos) - pivot.position
+	var angle = local_target.angle()
+	
+	var tween = create_tween().set_parallel(true)
+	# Swing Arm
+	tween.tween_property(pivot, "rotation", angle, 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	# Scoop Motion (Forward and Scale)
+	tween.tween_property(net, "position:x", 35.0, 0.1).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(net, "scale", Vector2(1.4, 1.4), 0.1)
+	
+	# Return
+	tween.set_parallel(false)
+	tween.tween_interval(0.05)
+	var back = create_tween().set_parallel(true)
+	back.tween_property(pivot, "rotation", 0.0, 0.2)
+	back.tween_property(net, "position:x", 22.0, 0.2)
+	back.tween_property(net, "scale", Vector2(1.0, 1.0), 0.2)
+	back.set_parallel(false)
+	back.tween_callback(func(): pivot.visible = false)
 
 func get_magnet_position():
 	return global_position

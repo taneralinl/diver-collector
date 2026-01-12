@@ -144,9 +144,10 @@ static func generate_capture_sfx(tier: int) -> AudioStreamWAV:
 	var type = "sine"
 	
 	match tier:
-		0: # Pearl: Plink!
-			duration = 0.1
+		0: # Pearl: Plink! + Swish
+			duration = 0.15
 			freq = 1200.0
+			type = "sine"
 		1, 2: # Fish: Splash/Meat!
 			duration = 0.2
 			freq = 400.0
@@ -172,6 +173,9 @@ static func generate_capture_sfx(tier: int) -> AudioStreamWAV:
 		var sample = 0.0
 		if type == "sine":
 			sample = sin(phase)
+			# Add subtle "swish" noise for tier 0/1 (Net/Hands)
+			if tier <= 1:
+				sample = (sample * 0.7) + ((randf() * 2.0 - 1.0) * 0.3 * exp(-30.0 * t))
 		elif type == "noise":
 			sample = (randf() * 2.0 - 1.0) * 0.5 + sin(phase) * 0.5
 		elif type == "chime":

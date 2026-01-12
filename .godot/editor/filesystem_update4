@@ -17,3 +17,4 @@ res://systems/depth/DepthLayerSystem.gd
 res://systems/economy/EconomySystem.gd
 res://ui/ShopUI.gd
 res://README.md
+res://Main.tscn
