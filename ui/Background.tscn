@@ -1,0 +1,26 @@
+[gd_scene load_steps=2 format=3 uid="uid://bg1v2w3x4y50"]
+
+[ext_resource type="Texture2D" path="res://assets/bg_ocean.svg" id="1_tex"]
+
+[ext_resource type="Texture2D" path="res://assets/overlay_vignette.svg" id="2_overlay"]
+
+[node name="Background" type="CanvasLayer" groups=["background"]]
+layer = -1
+
+[node name="Ocean" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_tex")
+stretch_mode = 6
+
+[node name="Vignette" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_overlay")
+expand_mode = 1

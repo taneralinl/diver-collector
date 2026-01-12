@@ -1,0 +1,9 @@
+# Godot-specific ignores
+.godot/
+
+# VS Code
+.vscode/
+
+# Editor-specific
+*.uid
+*.import

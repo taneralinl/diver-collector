@@ -1,0 +1,14 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="mineGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#555;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#222;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+  <!-- Spikes -->
+  <path d="M32 4 L34 20 M60 32 L44 34 M32 60 L30 44 M4 32 L20 30 M12 12 L24 24 M52 12 L40 24 M52 52 L40 40 M12 52 L24 40" stroke="#222" stroke-width="4" stroke-linecap="round"/>
+  <!-- Body -->
+  <circle cx="32" cy="32" r="16" fill="url(#mineGrad)" stroke="black" stroke-width="2"/>
+  <!-- Red Blinking Light -->
+  <circle cx="38" cy="26" r="3" fill="#ff0000" opacity="0.9"/>
+</svg>

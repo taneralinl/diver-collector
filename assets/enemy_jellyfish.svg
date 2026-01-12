@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Jellyfish - Purple glowing jellyfish -->
+  <ellipse cx="32" cy="24" rx="20" ry="16" fill="#E040FB" opacity="0.8"/>
+  <ellipse cx="32" cy="24" rx="14" ry="10" fill="#EA80FC" opacity="0.6"/>
+  <!-- Tentacles -->
+  <path d="M18,36 Q14,46 18,56" stroke="#CE93D8" stroke-width="3" fill="none" opacity="0.7"/>
+  <path d="M26,38 Q22,50 26,60" stroke="#CE93D8" stroke-width="3" fill="none" opacity="0.7"/>
+  <path d="M32,40 Q32,52 32,62" stroke="#CE93D8" stroke-width="3" fill="none" opacity="0.7"/>
+  <path d="M38,38 Q42,50 38,60" stroke="#CE93D8" stroke-width="3" fill="none" opacity="0.7"/>
+  <path d="M46,36 Q50,46 46,56" stroke="#CE93D8" stroke-width="3" fill="none" opacity="0.7"/>
+  <!-- Eyes -->
+  <circle cx="26" cy="22" r="3" fill="#1A1A2E"/>
+  <circle cx="38" cy="22" r="3" fill="#1A1A2E"/>
+</svg>

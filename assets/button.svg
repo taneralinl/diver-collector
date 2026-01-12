@@ -1,0 +1,10 @@
+<svg width="128" height="64" viewBox="0 0 128 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="btnGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4ecca3;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#45b792;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="124" height="60" rx="12" ry="12" fill="url(#btnGrad)" stroke="#2c3e50" stroke-width="2"/>
+  <rect x="6" y="6" width="116" height="24" rx="8" ry="8" fill="white" fill-opacity="0.2"/>
+</svg>

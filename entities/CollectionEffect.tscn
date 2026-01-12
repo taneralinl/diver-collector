@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://b2v3w4x5y607"]
+
+[ext_resource type="Script" path="res://entities/CollectionEffect.gd" id="1_effect"]
+[ext_resource type="Texture2D" path="res://assets/coin_pearl.svg" id="2_tex"]
+
+[node name="CollectionEffect" type="CPUParticles2D"]
+emitting = false
+amount = 6
+lifetime = 0.6
+one_shot = true
+explosiveness = 1.0
+texture = ExtResource("2_tex")
+direction = Vector2(0, -1)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 200.0
+scale_amount_min = 0.2
+scale_amount_max = 0.5
+color = Color(1, 1, 1, 0.8)
+script = ExtResource("1_effect")

@@ -1,0 +1,248 @@
+[gd_scene load_steps=5 format=3 uid="uid://u1v2w3x4y5z6"]
+
+[ext_resource type="Script" path="res://ui/GameUI.gd" id="1_ui_script"]
+[ext_resource type="Texture2D" path="res://assets/ui_panel.svg" id="2_panel"]
+[ext_resource type="Texture2D" path="res://assets/button.svg" id="3_btn"]
+[ext_resource type="Texture2D" path="res://assets/coin_pearl.svg" id="4_pearl"]
+
+[node name="GameUI" type="CanvasLayer"]
+script = ExtResource("1_ui_script")
+
+[node name="HUD" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="TopBar" type="HBoxContainer" parent="HUD/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+alignment = 0
+
+[node name="ScorePanel" type="TextureRect" parent="HUD/MarginContainer/TopBar"]
+custom_minimum_size = Vector2(240, 70)
+layout_mode = 2
+texture = ExtResource("2_panel")
+expand_mode = 1
+
+[node name="ScoreLabel" type="Label" parent="HUD/MarginContainer/TopBar/ScorePanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 28
+text = "Depth: 0m"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Spacer" type="Control" parent="HUD/MarginContainer/TopBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PearlPanel" type="TextureRect" parent="HUD/MarginContainer/TopBar"]
+custom_minimum_size = Vector2(160, 60)
+layout_mode = 2
+texture = ExtResource("2_panel")
+expand_mode = 1
+
+[node name="HBox" type="HBoxContainer" parent="HUD/MarginContainer/TopBar/PearlPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="HUD/MarginContainer/TopBar/PearlPanel/HBox"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("4_pearl")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PearlLabel" type="Label" parent="HUD/MarginContainer/TopBar/PearlPanel/HBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "0"
+
+[node name="BottomBar" type="HBoxContainer" parent="HUD/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="EquipmentPanel" type="HBoxContainer" parent="HUD/MarginContainer/BottomBar"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HUD/MarginContainer/BottomBar/EquipmentPanel"]
+layout_mode = 2
+text = "TOOL:"
+
+[node name="ToolName" type="Label" parent="HUD/MarginContainer/BottomBar/EquipmentPanel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 1, 0.6, 1)
+theme_override_font_sizes/font_size = 20
+text = "Bare Hands"
+
+[node name="Spacer" type="Control" parent="HUD/MarginContainer/BottomBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ZoneLabel" type="Label" parent="HUD/MarginContainer/BottomBar"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "THE SHALLOWS"
+
+[node name="MenuLayer" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MenuPanel" type="CenterContainer" parent="MenuLayer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MenuLayer/MenuPanel"]
+custom_minimum_size = Vector2(400, 300)
+layout_mode = 2
+
+[node name="Bg" type="TextureRect" parent="MenuLayer/MenuPanel/PanelContainer"]
+layout_mode = 2
+texture = ExtResource("2_panel")
+expand_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuLayer/MenuPanel/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Title" type="Label" parent="MenuLayer/MenuPanel/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.305882, 0.8, 0.639216, 1)
+theme_override_font_sizes/font_size = 42
+text = "ABYSS DIVER"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="HighScoreLabel" type="Label" parent="MenuLayer/MenuPanel/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.84, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "High Score: 0"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="StartButton" type="TextureButton" parent="MenuLayer/MenuPanel/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(160, 60)
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("3_btn")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MenuLayer/MenuPanel/PanelContainer/VBoxContainer/StartButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.1, 0.2, 0.3, 1)
+theme_override_font_sizes/font_size = 24
+text = "DIVE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GameOverLayer" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GameOverPanel" type="CenterContainer" parent="GameOverLayer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="GameOverLayer/GameOverPanel"]
+custom_minimum_size = Vector2(400, 300)
+layout_mode = 2
+
+[node name="Bg" type="TextureRect" parent="GameOverLayer/GameOverPanel/PanelContainer"]
+layout_mode = 2
+texture = ExtResource("2_panel")
+expand_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameOverLayer/GameOverPanel/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Title" type="Label" parent="GameOverLayer/GameOverPanel/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 48
+text = "DEPTH REACHED"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="FinalScoreLabel" type="Label" parent="GameOverLayer/GameOverPanel/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Score: 1240"
+horizontal_alignment = 1
+
+[node name="RestartButton" type="TextureButton" parent="GameOverLayer/GameOverPanel/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(180, 60)
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("3_btn")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="GameOverLayer/GameOverPanel/PanelContainer/VBoxContainer/RestartButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.1, 0.2, 0.3, 1)
+theme_override_font_sizes/font_size = 24
+text = "DIVE AGAIN"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="MenuLayer/MenuPanel/PanelContainer/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="GameOverLayer/GameOverPanel/PanelContainer/VBoxContainer/RestartButton" to="." method="_on_restart_button_pressed"]

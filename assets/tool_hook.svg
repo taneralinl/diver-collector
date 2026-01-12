@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Hook -->
+  <path d="M32,4 L32,44" stroke="#B0BEC5" stroke-width="4"/>
+  <path d="M32,44 Q16,44 16,32" stroke="#78909C" stroke-width="6" fill="none"/>
+  <path d="M32,44 Q48,44 48,32" stroke="#78909C" stroke-width="6" fill="none"/>
+  <circle cx="32" cy="4" r="4" fill="#546E7A"/>
+</svg>

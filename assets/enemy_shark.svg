@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 48">
+  <!-- Shark - Grey menacing shark -->
+  <ellipse cx="40" cy="24" rx="32" ry="14" fill="#607D8B"/>
+  <polygon points="72,24 88,12 88,36" fill="#546E7A"/>
+  <!-- Dorsal fin -->
+  <polygon points="35,10 40,0 45,10" fill="#546E7A"/>
+  <!-- Mouth -->
+  <path d="M8,24 Q12,28 8,32" fill="#37474F"/>
+  <path d="M10,26 L16,26 L13,29 Z" fill="white"/>
+  <path d="M14,26 L20,26 L17,29 Z" fill="white"/>
+  <path d="M18,26 L24,26 L21,29 Z" fill="white"/>
+  <!-- Eye -->
+  <circle cx="18" cy="20" r="4" fill="#1A1A2E"/>
+  <circle cx="18" cy="20" r="1.5" fill="#F44336"/>
+  <!-- Gills -->
+  <line x1="28" y1="18" x2="28" y2="30" stroke="#455A64" stroke-width="2"/>
+  <line x1="32" y1="18" x2="32" y2="30" stroke="#455A64" stroke-width="2"/>
+</svg>

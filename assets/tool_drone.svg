@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Drone -->
+  <circle cx="32" cy="32" r="12" fill="#212121"/>
+  <circle cx="32" cy="32" r="6" fill="#00E676"/> <!-- Eye -->
+  <!-- Rotors -->
+  <ellipse cx="12" cy="12" rx="10" ry="2" fill="#BDBDBD" transform="rotate(45 12 12)"/>
+  <ellipse cx="52" cy="12" rx="10" ry="2" fill="#BDBDBD" transform="rotate(-45 52 12)"/>
+  <ellipse cx="12" cy="52" rx="10" ry="2" fill="#BDBDBD" transform="rotate(-45 12 52)"/>
+  <ellipse cx="52" cy="52" rx="10" ry="2" fill="#BDBDBD" transform="rotate(45 52 52)"/>
+  <!-- Arms -->
+  <line x1="24" y1="24" x2="16" y2="16" stroke="#424242" stroke-width="3"/>
+  <line x1="40" y1="24" x2="48" y2="16" stroke="#424242" stroke-width="3"/>
+  <line x1="24" y1="40" x2="16" y2="48" stroke="#424242" stroke-width="3"/>
+  <line x1="40" y1="40" x2="48" y2="48" stroke="#424242" stroke-width="3"/>
+</svg>

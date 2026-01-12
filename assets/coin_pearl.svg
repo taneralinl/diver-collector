@@ -1,0 +1,14 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="pearlGrad" cx="40%" cy="40%" r="50%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e6e6fa;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+  <!-- Shell Bottom -->
+  <path d="M12 32 Q32 60 52 32" fill="#FFB6C1" stroke="#DB7093" stroke-width="2"/>
+  <!-- Pearl -->
+  <circle cx="32" cy="28" r="10" fill="url(#pearlGrad)"/>
+  <!-- Sparkles -->
+  <path d="M26 18 L28 12 L30 18 M38 16 L40 10 L42 16" stroke="white" stroke-width="2" opacity="0.8"/>
+</svg>

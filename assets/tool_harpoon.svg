@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Harpoon -->
+  <path d="M10,32 L54,32" stroke="#607D8B" stroke-width="6"/>
+  <polygon points="54,24 64,32 54,40" fill="#CFD8DC"/>
+  <rect x="4" y="28" width="8" height="8" fill="#37474F"/>
+  <path d="M12,32 L20,24" stroke="#607D8B" stroke-width="2"/>
+</svg>
