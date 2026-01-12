@@ -5,7 +5,7 @@ const SAMPLE_RATE = 44100
 const BIT_DEPTH = 16 # 16-bit PCM
 
 # Generates a "Kickbox Impact" (Low Thud + Noise)
-static func generate_coin_sfx() -> AudioStreamWAV:
+static func generate_shard_sfx() -> AudioStreamWAV:
 	var duration = 0.15 # Short and punchy
 	var frames = int(SAMPLE_RATE * duration)
 	var stream = AudioStreamWAV.new()

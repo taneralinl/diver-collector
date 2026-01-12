@@ -1,6 +1,6 @@
 extends Node
 
-var sfx_coin: AudioStreamWAV
+var sfx_shard: AudioStreamWAV
 var sfx_dash: AudioStreamWAV
 var sfx_hit: AudioStreamWAV
 
@@ -8,7 +8,7 @@ func _ready():
 	# Generate sounds procedurally on startup
 	var wave_gen = load("res://systems/audio/WaveGenerator.gd")
 	if wave_gen:
-		sfx_coin = wave_gen.generate_coin_sfx()
+		sfx_shard = wave_gen.generate_shard_sfx()
 		sfx_dash = wave_gen.generate_dash_sfx()
 		sfx_hit = wave_gen.generate_hit_sfx()
 		print("SoundManager: Procedural Audio Generated")

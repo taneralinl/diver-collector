@@ -12,7 +12,7 @@ const SECTION_ECONOMY = "economy"
 const SECTION_UPGRADES = "upgrades"
 
 const KEY_HIGH_SCORE = "high_score"
-const KEY_DEEP_COINS = "deep_coins"
+const KEY_ABYSS_SHARDS = "abyss_shards"
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # HIGH SCORE
@@ -32,15 +32,15 @@ func load_high_score() -> int:
 # ECONOMY DATA
 # ═══════════════════════════════════════════════════════════════════════════════
 
-func save_deep_coins(amount: int):
+func save_abyss_shards(amount: int):
 	var config = _load_config()
-	config.set_value(SECTION_ECONOMY, KEY_DEEP_COINS, amount)
+	config.set_value(SECTION_ECONOMY, KEY_ABYSS_SHARDS, amount)
 	config.save(SAVE_PATH)
-	print("💾 Deep Coins saved: %d" % amount)
+	print("💾 Abyss Shards saved: %d" % amount)
 
-func load_deep_coins() -> int:
+func load_abyss_shards() -> int:
 	var config = _load_config()
-	return config.get_value(SECTION_ECONOMY, KEY_DEEP_COINS, 0)
+	return config.get_value(SECTION_ECONOMY, KEY_ABYSS_SHARDS, 0)
 
 func save_upgrades(upgrades: Dictionary):
 	var config = _load_config()
@@ -70,5 +70,5 @@ func _load_config() -> ConfigFile:
 
 func save_all(economy_system):
 	"""Convenience method to save all economy data at once."""
-	save_deep_coins(economy_system.get_deep_coins())
+	save_abyss_shards(economy_system.get_abyss_shards())
 	save_upgrades(economy_system.get_purchased_upgrades())

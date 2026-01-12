@@ -11,7 +11,7 @@ signal continue_pressed
 # REFERENCES
 # ═══════════════════════════════════════════════════════════════════════════════
 
-@onready var coins_label = $Panel/VBoxContainer/Header/CoinsLabel
+@onready var shards_label = $Panel/VBoxContainer/Header/CoinsLabel
 @onready var upgrades_container = $Panel/VBoxContainer/UpgradesContainer
 @onready var continue_button = $Panel/VBoxContainer/ContinueButton
 
@@ -27,12 +27,12 @@ func _ready():
 
 func setup(econ_sys):
 	economy_system = econ_sys
-	economy_system.deep_coins_changed.connect(_update_coins_display)
+	economy_system.abyss_shards_changed.connect(_update_shards_display)
 	economy_system.upgrade_purchased.connect(_refresh_upgrades)
 
 func show_shop():
 	visible = true
-	_update_coins_display(economy_system.get_deep_coins())
+	_update_shards_display(economy_system.get_abyss_shards())
 	_refresh_upgrades("")
 	
 	# Add Reset Button if not exists
@@ -52,7 +52,7 @@ func show_shop():
 		reset_btn.pressed.connect(func():
 			if economy_system: economy_system.reset_persistence()
 			_refresh_upgrades("")
-			_update_coins_display(0)
+			_update_shards_display(0)
 		)
 		$Panel/VBoxContainer.add_child(reset_btn)
 
@@ -63,9 +63,9 @@ func hide_shop():
 # UI UPDATES
 # ═══════════════════════════════════════════════════════════════════════════════
 
-func _update_coins_display(amount: int):
-	if coins_label:
-		coins_label.text = "💎 %d Deep Coins" % amount
+func _update_shards_display(amount: int):
+	if shards_label:
+		shards_label.text = "💎 %d Abyss Shards" % amount
 
 func _refresh_upgrades(_upgrade_id: String):
 	# Clear existing buttons

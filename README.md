@@ -1,4 +1,4 @@
-# Diver Collector v1.0 🌊⚓✨
+# Diver Collector v0.0.0.1 🌊⚓✨
 
 **Diver Collector** is an addictive, high-juice aquatic roguelite built in Godot 4.3. Dive deep, collect rare pearls, and upgrade your gear to survive the crushing depths.
 
@@ -8,7 +8,7 @@
 - **Navigate Menus:** Mouse
 
 ## ✨ Key Features
-- **Addictive Feedback Loop:** Satisfying procedural "Plink!" sounds for pearls and heavy "Splash!" impacts for fish.
+- **Addictive Feedback Loop:** Satisfying procedural "Plink!" sounds for shards and heavy "Splash!" impacts for fish.
 - **Specialized Tools:** 
     - **Net:** Wide area capture.
     - **Hook/Harpoon:** Long-range precision snags.

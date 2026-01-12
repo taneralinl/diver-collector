@@ -1,4 +1,4 @@
-# ABYSS DIVER — Complete Game Design Document v2.0
+# ABYSS DIVER — Complete Game Design Document v0.0.0.1
 
 ---
 
@@ -72,11 +72,11 @@
 | Currency | Source | Use |
 |----------|--------|-----|
 | **Pearls** | In-run collection | Temporary power-ups |
-| **Deep Coins** | End-of-run conversion | Permanent upgrades |
+| **Abyss Shards** | End-of-run conversion | Permanent upgrades |
 
 ### 4.2 Conversion Rate
 ```
-Deep Coins = Total Pearls Collected × (1 + Depth Layer Bonus)
+Abyss Shards = Total Pearls Collected × (1 + Depth Layer Bonus)
 ```
 
 ---
@@ -95,9 +95,9 @@ Deep Coins = Total Pearls Collected × (1 + Depth Layer Bonus)
 
 ### 6.1 Required Screens
 1. **Title Screen** — Animated ocean background, "DIVE" button
-2. **Shop Screen** — Between runs, spend Deep Coins
+2. **Shop Screen** — Between runs, spend Abyss Shards
 3. **HUD** — Score, Depth Layer, Equipment Icon, Oxygen Bar
-4. **Game Over** — Stats summary, "Pearls Earned", "Deep Coins"
+4. **Game Over** — Stats summary, "Pearls Earned", "Abyss Shards"
 
 ### 6.2 Visual Polish
 - Equipment icon with durability/level indicator
@@ -148,5 +148,5 @@ Every feature = isolated system with clear signals:
 
 ---
 
-*Document Version: 2.0*
+*Document Version: 0.0.0.1*
 *Last Updated: 2026-01-12*

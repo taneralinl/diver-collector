@@ -23,7 +23,7 @@ var transition_ui
 # ═══════════════════════════════════════════════════════════════════════════════
 
 func _ready():
-	print("🎮 Abyss Diver Starting... Initializing Systems")
+	print("🎮 Abyss Diver [v0.0.0.1] Starting... Initializing Systems")
 	_initialize_systems()
 
 func _initialize_systems():
@@ -127,7 +127,7 @@ func _initialize_systems():
 		)
 	
 	# Load saved economy data
-	economy_system.set_deep_coins(persistence_system.load_deep_coins())
+	economy_system.set_abyss_shards(persistence_system.load_abyss_shards())
 	economy_system.set_purchased_upgrades(persistence_system.load_upgrades())
 
 	# 10. Shop UI
@@ -204,10 +204,10 @@ func _on_game_over():
 		persistence_system.save_high_score(final_score)
 		game_ui.update_high_score(final_score)
 	
-	# Convert run pearls to deep coins
+	# Convert run pearls to abyss shards
 	if economy_system:
 		var depth_bonus = 1.0 + (depth_layer_system.current_layer / 500.0) if depth_layer_system else 1.0
-		economy_system.convert_pearls_to_coins(depth_bonus)
+		economy_system.convert_pearls_to_shards(depth_bonus)
 		persistence_system.save_all(economy_system)
 	
 	game_ui.show_game_over(final_score)

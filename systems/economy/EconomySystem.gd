@@ -7,7 +7,7 @@ class_name EconomySystem
 # ═══════════════════════════════════════════════════════════════════════════════
 
 signal pearls_changed(amount: int)
-signal deep_coins_changed(amount: int)
+signal abyss_shards_changed(amount: int)
 signal upgrade_purchased(upgrade_id: String)
 signal save_requested
 
@@ -58,7 +58,7 @@ const UPGRADES = {
 # ═══════════════════════════════════════════════════════════════════════════════
 
 var run_pearls: int = 0        # Temporary (current run)
-var deep_coins: int = 0        # Permanent (meta currency)
+var abyss_shards: int = 0        # Permanent (meta currency)
 var purchased_upgrades: Dictionary = {} # {upgrade_id: level}
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -84,23 +84,23 @@ func reset_run():
 	pearls_changed.emit(run_pearls)
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# META CURRENCY (Deep Coins)
+# META CURRENCY (Abyss Shards)
 # ═══════════════════════════════════════════════════════════════════════════════
 
-func convert_pearls_to_coins(depth_bonus: float = 1.0):
-	"""Called at end of run. Converts pearls to deep coins with bonus."""
+func convert_pearls_to_shards(depth_bonus: float = 1.0):
+	"""Called at end of run. Converts pearls to abyss shards with bonus."""
 	var conversion = int(run_pearls * depth_bonus)
-	deep_coins += conversion
-	deep_coins_changed.emit(deep_coins)
-	print("💰 Converted %d Pearls → %d Deep Coins (%.1fx bonus)" % [run_pearls, conversion, depth_bonus])
+	abyss_shards += conversion
+	abyss_shards_changed.emit(abyss_shards)
+	print("💎 Converted %d Pearls → %d Abyss Shards (%.1fx bonus)" % [run_pearls, conversion, depth_bonus])
 	return conversion
 
-func get_deep_coins() -> int:
-	return deep_coins
+func get_abyss_shards() -> int:
+	return abyss_shards
 
-func set_deep_coins(amount: int):
-	deep_coins = amount
-	deep_coins_changed.emit(deep_coins)
+func set_abyss_shards(amount: int):
+	abyss_shards = amount
+	abyss_shards_changed.emit(abyss_shards)
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # UPGRADES
@@ -120,21 +120,21 @@ func can_purchase(upgrade_id: String) -> bool:
 		return false
 	
 	var cost = _calculate_cost(upgrade_id)
-	return deep_coins >= cost
+	return abyss_shards >= cost
 
 func purchase_upgrade(upgrade_id: String) -> bool:
 	if not can_purchase(upgrade_id):
 		return false
 	
 	var cost = _calculate_cost(upgrade_id)
-	deep_coins -= cost
+	abyss_shards -= cost
 	purchased_upgrades[upgrade_id] = get_upgrade_level(upgrade_id) + 1
 	
-	deep_coins_changed.emit(deep_coins)
+	abyss_shards_changed.emit(abyss_shards)
 	upgrade_purchased.emit(upgrade_id)
 	save_requested.emit()
 	
-	print("🛒 Purchased: %s (Level %d) for %d Deep Coins" % [
+	print("🛒 Purchased: %s (Level %d) for %d Abyss Shards" % [
 		UPGRADES[upgrade_id].name, 
 		purchased_upgrades[upgrade_id], 
 		cost
@@ -157,10 +157,10 @@ func set_purchased_upgrades(data: Dictionary):
 	purchased_upgrades = data
 
 func reset_persistence():
-	"""Reset all progress (Deep Coins & Upgrades)."""
-	deep_coins = 0
+	"""Reset all progress (Abyss Shards & Upgrades)."""
+	abyss_shards = 0
 	purchased_upgrades.clear()
-	deep_coins_changed.emit(deep_coins)
+	abyss_shards_changed.emit(abyss_shards)
 	save_requested.emit()
 	print("🔥 Economy Hard Reset Performed")
 
