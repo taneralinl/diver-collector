@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://b8v9w0x1y2z3"]
+
+[node name="BubbleTrail" type="CPUParticles2D"]
+amount = 12
+lifetime = 0.8
+speed_scale = 0.8
+randomness = 0.5
+direction = Vector2(0, 1)
+spread = 20.0
+gravity = Vector2(0, -50)
+initial_velocity_min = 20.0
+initial_velocity_max = 40.0
+scale_amount_min = 1.0
+scale_amount_max = 3.0
+color = Color(0.7, 0.9, 1, 0.4)

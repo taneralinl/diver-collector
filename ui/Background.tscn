@@ -1,26 +1,45 @@
-[gd_scene load_steps=2 format=3 uid="uid://bg1v2w3x4y50"]
+[gd_scene load_steps=5 format=3 uid="uid://bg1v2w3x4y50"]
 
 [ext_resource type="Texture2D" path="res://assets/bg_ocean.svg" id="1_tex"]
+[ext_resource type="Texture2D" path="res://assets/bg_deep.svg" id="2_deep"]
+[ext_resource type="Texture2D" path="res://assets/bg_particles.svg" id="3_particles"]
+[ext_resource type="Texture2D" path="res://assets/overlay_vignette.svg" id="4_vignette"]
 
-[ext_resource type="Texture2D" path="res://assets/overlay_vignette.svg" id="2_overlay"]
+[node name="Background" type="ParallaxBackground" groups=["background"]]
 
-[node name="Background" type="CanvasLayer" groups=["background"]]
-layer = -1
+[node name="LayerDeep" type="ParallaxLayer" parent="."]
+motion_mirroring = Vector2(0, 1024)
 
-[node name="Ocean" type="TextureRect" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Sprite" type="Sprite2D" parent="LayerDeep"]
+texture = ExtResource("2_deep")
+centered = false
+
+[node name="LayerBase" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(1, 0.5)
+motion_mirroring = Vector2(0, 1024)
+
+[node name="Sprite" type="Sprite2D" parent="LayerBase"]
 texture = ExtResource("1_tex")
-stretch_mode = 6
+centered = false
+modulate = Color(1, 1, 1, 0.3)
 
-[node name="Vignette" type="TextureRect" parent="."]
+[node name="LayerParticles" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(1, 2.0)
+motion_mirroring = Vector2(0, 1024)
+
+[node name="Sprite" type="Sprite2D" parent="LayerParticles"]
+texture = ExtResource("3_particles")
+centered = false
+
+[node name="VignetteLayer" type="CanvasLayer" parent="."]
+layer = 0
+
+[node name="Vignette" type="TextureRect" parent="VignetteLayer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_overlay")
+mouse_filter = 2
+texture = ExtResource("4_vignette")
 expand_mode = 1

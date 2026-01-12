@@ -33,6 +33,12 @@ var extra_life_used = false
 func _ready():
 	add_to_group("player")
 	apply_upgrades()
+	
+	# Add Bubble Trail
+	var trail = load("res://entities/BubbleTrail.tscn").instantiate()
+	trail.name = "BubbleTrail"
+	trail.position = Vector2(0, 15)
+	add_child(trail)
 
 func apply_upgrades():
 	"""Apply shop upgrades to player stats."""
@@ -118,6 +124,17 @@ func _physics_process(delta):
 		rotation_degrees = lerp(rotation_degrees, velocity.x / speed * 15.0, 0.2)
 	else:
 		rotation_degrees = lerp(rotation_degrees, 0.0, 0.2)
+	
+	# Update Bubble Trail
+	var trail = get_node_or_null("BubbleTrail")
+	if trail:
+		trail.emitting = velocity.length() > 50
+		if is_dashing:
+			trail.amount = 30
+			trail.speed_scale = 2.0
+		else:
+			trail.amount = 12
+			trail.speed_scale = 0.8
 	
 	move_and_slide()
 	

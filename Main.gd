@@ -226,6 +226,24 @@ func _on_collectible_spawned(collectible):
 			# VFX: Spawn Particles
 			var effect = load("res://entities/CollectionEffect.tscn").instantiate()
 			effect.position = collectible.position
+			
+			# Customize particles based on tier
+			if value < 25: # Small pearl
+				effect.scale_amount_min = 0.1
+				effect.scale_amount_max = 0.2
+				effect.amount = 3
+			else: # Bigger fish
+				effect.scale_amount_min = 0.3
+				effect.scale_amount_max = 0.6
+				effect.amount = 8
+				shake_screen(3.0, 0.2)
+				
+				# Hit Stop (Juice)
+				if value >= 100: # Large targets
+					Engine.time_scale = 0.05
+					await get_tree().create_timer(0.05, true, false, true).timeout
+					Engine.time_scale = 1.0
+			
 			add_child(effect)
 			
 			# Track pearls for economy
@@ -250,6 +268,11 @@ func _on_score_updated(new_score):
 	# Update Depth Layer visuals
 	if depth_layer_system:
 		depth_layer_system.update_depth(new_score)
+	
+	# Parallax Background Scroll
+	var bg = get_tree().get_first_node_in_group("background")
+	if bg and bg is ParallaxBackground:
+		bg.scroll_offset.y = new_score * 0.5 # Scroll downwards as depth increases
 	
 	# Check for Equipment Upgrades
 	if equipment_system:
